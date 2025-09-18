@@ -6,3 +6,34 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<div class="mt-4">
+    <h2>Upload Image to GCP Bucket</h2>
+    <a href="@Url.Action("Index", "Gallery")" class="btn btn-outline-secondary mb-3">View All Images in Bucket</a>
+    @if (TempData["UploadMessage"] != null)
+    {
+        <div class="alert alert-info">@TempData["UploadMessage"]</div>
+    }
+    @if (TempData["ImageUrls"] != null)
+    {
+        var imageUrlsJson = TempData["ImageUrls"] as string;
+        var urls = !string.IsNullOrEmpty(imageUrlsJson)
+            ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(imageUrlsJson)
+            : new List<string>();
+        if (urls != null && urls.Count > 0)
+        {
+            <div class="mt-3 d-flex flex-wrap gap-2">
+                @foreach (var url in urls)
+                {
+                    <img src="@url" alt="Uploaded Image" style="max-width:200px;max-height:200px;" class="img-thumbnail" />
+                }
+            </div>
+        }
+    }
+    <form asp-controller="Home" asp-action="UploadImage" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="file" name="imageFiles" accept="image/*" class="form-control" multiple required />
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Upload</button>
+    </form>
+</div>

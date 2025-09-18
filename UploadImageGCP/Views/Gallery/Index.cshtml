@@ -1,0 +1,31 @@
+@model List<string>
+@{
+    ViewData["Title"] = "All Images in GCP Bucket";
+}
+
+<h2>All Images in GCP Bucket</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Thumbnail</th>
+                <th>Image URL</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var url in Model)
+        {
+            <tr>
+                <td><img src="@url" alt="Image" style="max-width:120px;max-height:120px;" class="img-thumbnail" /></td>
+                <td><a href="@url" target="_blank">@url</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No images found in the bucket.</div>
+}
