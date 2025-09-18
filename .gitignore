@@ -364,7 +364,6 @@ FodyWeavers.xsd
 
 # Ignore sensitive config and credential files
 UploadImageGCP/adroit-listener-472404-k6-1d056a31092c.json
-UploadImageGCP/appsettings*.json
 UploadImageGCP/appsettings.json
 UploadImageGCP/appsettings.Development.json
-UploadImageGCP/appsettings.Development.json
+
