@@ -35,7 +35,7 @@ namespace UploadImageGCP.Controllers
             // Diagnostic: log all config keys/values
             foreach (var kvp in _config.AsEnumerable())
             {
-                _logger.LogInformation($"CONFIG: {kvp.Key} = {kvp.Value}");
+                // _logger.LogInformation($"CONFIG: {kvp.Key} = {kvp.Value}");
             }
             if (imageFiles == null || imageFiles.Length == 0 || imageFiles.All(f => f == null || f.Length == 0))
             {
