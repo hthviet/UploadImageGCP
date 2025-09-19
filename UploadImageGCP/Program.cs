@@ -6,6 +6,29 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Register GcpUploadService and StorageClient
+builder.Services.AddSingleton(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var bucketName = config["GcpStorage:BucketName"];
+    if (string.IsNullOrEmpty(bucketName))
+    {
+        throw new InvalidOperationException("GcpStorage:BucketName configuration value is missing or empty.");
+    }
+    var credentialsPath = config["GcpStorage:CredentialsPath"];
+    Google.Cloud.Storage.V1.StorageClient storageClient;
+    if (!string.IsNullOrEmpty(credentialsPath) && System.IO.File.Exists(credentialsPath))
+    {
+        var credential = Google.Apis.Auth.OAuth2.GoogleCredential.FromFile(credentialsPath);
+        storageClient = Google.Cloud.Storage.V1.StorageClient.Create(credential);
+    }
+    else
+    {
+        storageClient = Google.Cloud.Storage.V1.StorageClient.Create();
+    }
+    return new UploadImageGCP.Services.GcpUploadService(storageClient, bucketName);
+});
+
 // Configure GCP Pub/Sub settings (replace with your actual values or use configuration)
 string gcpProjectId = "your-gcp-project-id";
 string pubsubTopicId = "your-topic-id";
